@@ -3,20 +3,21 @@
 $font = 'Nunito', sans-serif
 
 @keyframes grow {
-  0% {
+  0%, 75% {
     transform: scale(1);
+    opacity: 0;
+    color: #fafafa
+  }
+  90% {
+    transform: scale(1.8);
     opacity: 1;
     color: #212121
-  }
-  50% {
-    transform: scale(1.4);
-    opacity: 0.2;
-    color: #fafafa
   }
   100% {
     transform: scale(1);
-    opacity: 1;
-    color: #212121
+    transform: rotate(18degs)
+    opacity: 0;
+    color: #fafafa
   }
 }
 

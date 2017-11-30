@@ -36,42 +36,46 @@ body {
           animation: grow 1.5s linear infinite;
 }
 @-webkit-keyframes grow {
-  0% {
+  0%, 75% {
     -webkit-transform: scale(1);
             transform: scale(1);
+    opacity: 0;
+    color: #fafafa;
+  }
+  90% {
+    -webkit-transform: scale(1.8);
+            transform: scale(1.8);
     opacity: 1;
     color: #212121;
-  }
-  50% {
-    -webkit-transform: scale(1.4);
-            transform: scale(1.4);
-    opacity: 0.2;
-    color: #fafafa;
   }
   100% {
     -webkit-transform: scale(1);
             transform: scale(1);
-    opacity: 1;
-    color: #212121;
+    -webkit-transform: rotate(18degs);
+            transform: rotate(18degs);
+    opacity: 0;
+    color: #fafafa;
   }
 }
 @keyframes grow {
-  0% {
+  0%, 75% {
     -webkit-transform: scale(1);
             transform: scale(1);
+    opacity: 0;
+    color: #fafafa;
+  }
+  90% {
+    -webkit-transform: scale(1.8);
+            transform: scale(1.8);
     opacity: 1;
     color: #212121;
-  }
-  50% {
-    -webkit-transform: scale(1.4);
-            transform: scale(1.4);
-    opacity: 0.2;
-    color: #fafafa;
   }
   100% {
     -webkit-transform: scale(1);
             transform: scale(1);
-    opacity: 1;
-    color: #212121;
+    -webkit-transform: rotate(18degs);
+            transform: rotate(18degs);
+    opacity: 0;
+    color: #fafafa;
   }
 }
