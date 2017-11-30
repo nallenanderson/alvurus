@@ -1,5 +1,5 @@
+const apiController = require('../controllers/apiController');
+
 module.exports = (app) => {
-  app.get('/', (req, res) => {
-    res.json({ message: 'Alvurus Fucking Calendar!' });
-  });
+  app.get('/', apiController.home);
 }
