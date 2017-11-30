@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+body {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  background: #fcfcfc;
+  color: #414141;
+}
+.infinity__section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100wv;
+  height: 100vh;
+  font-weight: 400;
+}
+.infinity__image {
+  width: 500px;
+  height: auto;
+}
+.infinity__title {
+  font-weight: 400;
+  letter-spacing: 10px;
+  -webkit-animation: grow 1.5s linear infinite;
+          animation: grow 1.5s linear infinite;
+}
+@-webkit-keyframes grow {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+    color: #212121;
+  }
+  50% {
+    -webkit-transform: scale(1.4);
+            transform: scale(1.4);
+    opacity: 0.2;
+    color: #fafafa;
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+    color: #212121;
+  }
+}
+@keyframes grow {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+    color: #212121;
+  }
+  50% {
+    -webkit-transform: scale(1.4);
+            transform: scale(1.4);
+    opacity: 0.2;
+    color: #fafafa;
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+    color: #212121;
+  }
+}

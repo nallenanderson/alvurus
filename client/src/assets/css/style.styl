@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+$font = 'Nunito', sans-serif
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    color: #212121
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.2;
+    color: #fafafa
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    color: #212121
+  }
+}
+
+body
+  font-family: $font
+  font-size: 18px
+  margin: 0
+  padding: 0
+  background: #fcfcfc
+  color: #414141
+
+.infinity__section
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  width: 100wv
+  height: 100vh
+  font-weight: 400
+
+.infinity__image
+  width: 500px
+  height: auto
+
+.infinity__title
+  font-weight: 400
+  letter-spacing: 10px
+  animation: grow 1.5s linear infinite
