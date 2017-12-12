@@ -1,5 +1,5 @@
 const apiController = require('../controllers/apiController');
 
 module.exports = (app) => {
-  app.get('/api', apiController.home);
+  app.get('/api/penis', apiController.home);
 }
