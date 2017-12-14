@@ -1,0 +1,21 @@
+{
+  "connections": {
+    "core": "mongodb://localhost/fidelity"
+  },
+  "cookies": {
+    "key": "123123123123",
+    "secret": "iLoveAlvaro"
+  },
+  "server": {
+    "port": "5000"
+  },
+  "modules": {
+    "users": {
+      "password": {
+        "hash": "sha256",
+        "hashInputEncoding": "utf8",
+        "hashOutputEncoding": "hex"
+      }
+    }
+  }
+}

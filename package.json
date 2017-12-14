@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./index",
-    "server": "nodemon ./index",
+    "server": "./node_modules/.bin/nodemon ./index",
+    "server-debug": "node debug .",
     "client": "npm run watch --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
@@ -14,9 +15,9 @@
   "author": "Nathan Allen",
   "license": "ISC",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.1",
+    "config": "^1.28.1",
     "connect-mongo": "^2.0.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
@@ -26,8 +27,13 @@
     "mongoose": "^4.13.5",
     "mongoose-mongodb-errors": "0.0.2",
     "passport": "^0.4.0",
+    "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.4.0",
+    "uuid": "^3.1.0",
     "validator": "^9.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.7"
   }
 }

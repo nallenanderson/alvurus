@@ -3,27 +3,29 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const { cookieKey, mongoURI } = require('./configs/keys');
+const config = require('config');
+
+const {connections, cookies } = config;
 
 require('./models/User');
 require('./utils/passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoURI, { useMongoClient: true });
+mongoose.connect(connections.core, { useMongoClient: true });
 
 const app = express();
 
 app.use(bodyParser.json());
 
-app.use(
-  cookieSession({
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    keys: [cookieKey]
-  })
-);
+// app.use(
+//   cookieSession({
+//     maxAge: 30 * 24 * 60 * 60 * 1000,
+//     keys: [cookies.key]
+//   })
+// );
 
 app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.session());
 
 // ROUTES
 require('./routes/apiRoutes')(app);

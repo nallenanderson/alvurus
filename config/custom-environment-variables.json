@@ -1,0 +1,21 @@
+{
+  "connections" : {
+    "core": "MONGO_URI"
+  },
+  "cookies": {
+    "key": "COOKIE_KEY",
+    "secret": "COOKIE_SECRET"
+  },
+  "server": {
+    "port": "PORT"
+  },
+  "modules": {
+    "users": {
+      "password": {
+        "hash": "USERS_HASH",
+        "hashInputEncoding": "USERS_HASH_INPUT_ENCODING",
+        "hashOutputEncoding": "USERS_HASH_OUTPUT_ENCODING"
+      }
+    }
+  }
+}
