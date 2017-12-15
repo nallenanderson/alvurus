@@ -48,7 +48,7 @@ module.exports.validateCompany = (req, res, next) => {
   });
 }
 
-exports.getMe = (req, res, next) => {
+exports.get = (req, res, next) => {
   const {auth_token, scan_code, scope} = req.user;
   res.status(200).json({auth_token, scan_code, scope});
 };

@@ -52,7 +52,11 @@ const userSchema = new Schema({
   scope: {
     type: String,
     require: 'Please provide scope.'
-  }
+  },
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company'
+  },
 });
 
 const {hash, hashInputEncoding, hashOutputEncoding} = config.get('modules.users.password');

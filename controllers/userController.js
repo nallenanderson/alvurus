@@ -100,16 +100,15 @@ exports.signupOwnerPassword = (req, res) => {
 
   const { email, password, first_name, last_name, company_name, company_address, business_type } = req.body;
 
-  Promise
-    .all([
-      new User({ email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Owner }).create(password),
-      new Company({ business_type, name: company_name, address: company_address, status: CompanyStatus.Active }).save()
-    ])
-    .then(([user, company]) => {
-
-      const {auth_token} = user;
+  new Company({ business_type, name: company_name, address: company_address, status: CompanyStatus.Active })
+    .save()
+    .then(company => {
+      return new User({ company, email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Owner })
+        .create(password);
+    })
+    .then((user) => {
+      const {auth_token, company} = user;
       const {_id: company_id} = company;
-
       res.status(201).send({auth_token, company_id});
     })
     .catch((err) => {
