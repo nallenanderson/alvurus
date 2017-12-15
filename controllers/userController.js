@@ -86,7 +86,7 @@ exports.signupRegularPassword = (req, res) => {
   const { email, password, first_name, last_name } = req.body;
 
   new User({ email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Customer })
-    .create()
+    .create(password)
     .then(({auth_token}) => {
       res.status(201).send({auth_token});
     })
@@ -102,7 +102,7 @@ exports.signupOwnerPassword = (req, res) => {
 
   Promise
     .all([
-      new User({ email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Owner }).create(),
+      new User({ email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Owner }).create(password),
       new Company({ business_type, name: company_name, address: company_address, status: CompanyStatus.Active }).save()
     ])
     .then(([user, company]) => {

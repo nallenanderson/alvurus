@@ -65,11 +65,11 @@ const generateHash = (email, password) => {
   return passHash.digest(hashOutputEncoding);
 };
 
-userSchema.methods.create = function() {
+userSchema.methods.create = function(password) {
 
   this.auth_token = uuidv4();
   this.scan_code = uuidv4()
-  this.password = this.generateHash(this.password);
+  this.password = this.generateHash(password);
 
   return this.save();
 
