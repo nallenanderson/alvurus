@@ -2,7 +2,17 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const config = require('config');
 const crypto = require('crypto');
+const uuidv4 = require('uuid/v4');
 const { Schema }  = mongoose;
+
+const UserStatus = {
+  Active: 0
+};
+const UserScope = {
+  Owner: 'owner',
+  Employee: 'employee',
+  Customer: 'customer'
+};
 
 const userSchema = new Schema({
   email: {
@@ -34,6 +44,14 @@ const userSchema = new Schema({
   scan_code: {
     type: String,
     trim: true,
+  },
+  status: {
+    type: Number,
+    require: 'Please provide status.'
+  },
+  scope: {
+    type: String,
+    require: 'Please provide scope.'
   }
 });
 
@@ -45,6 +63,16 @@ const generateHash = (email, password) => {
 
   passHash.update(`${email}${password}`, hashInputEncoding)
   return passHash.digest(hashOutputEncoding);
+};
+
+userSchema.methods.create = function() {
+
+  this.auth_token = uuidv4();
+  this.scan_code = uuidv4()
+  this.password = this.generateHash(this.password);
+
+  return this.save();
+
 };
 
 userSchema.methods.generateHash = function(password) {
@@ -59,4 +87,7 @@ userSchema.methods.validPassword = function(password) {
   return generateHash(model.email, password) === model.password;
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = {
+  UserStatus, UserScope,
+  User: mongoose.model('User', userSchema)
+};

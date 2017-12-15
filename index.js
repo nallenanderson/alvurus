@@ -7,6 +7,7 @@ const config = require('config');
 
 const {connections, cookies } = config;
 
+require('./models/Company');
 require('./models/User');
 require('./utils/passport');
 

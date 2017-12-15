@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { Strategy: LocalStrategy } = require('passport-local').Strategy;
 const { Strategy: BearerStrategy } = require('passport-http-bearer').Strategy;
 const User = mongoose.model('User');
+const {UserStatus} = require('../models/User.js');
 
 // passport.use('local', new LocalStrategy({
 //   usernameField : 'email',
@@ -32,7 +33,7 @@ const User = mongoose.model('User');
 
 passport.use('bearer', new BearerStrategy(
   (auth_token, cb) => {
-    User.findOne({ auth_token }, (err, user) => {
+    User.findOne({ auth_token, status: UserStatus.Active }, (err, user) => {
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       return cb(null, user);
@@ -45,10 +46,7 @@ passport.use('local', new LocalStrategy({
   passReqToCallback : true
 },
   async (req, email, password, done) => {
-    console.log('here', password);
-    User.findOne({ email }, (err, user) => {
-
-      debugger
+    User.findOne({ email, status: UserStatus.Active }, (err, user) => {
       if (err) return done(err);
 
       if (!user) {
