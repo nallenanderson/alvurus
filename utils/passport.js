@@ -23,6 +23,8 @@ passport.use('local', new LocalStrategy({
   passReqToCallback : true
 },
   async (req, email, password, done) => {
+    console.log('Hello');
+    console.log(req.body);
     User
       .findOne({ email, status: UserStatus.Active })
       .populate('company')

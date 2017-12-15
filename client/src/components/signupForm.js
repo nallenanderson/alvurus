@@ -52,9 +52,11 @@ export default class SignupForm extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    const body = {...this.state}
+    const body = {...this.state};
 
-    fetch('/api/signup', {
+    body.status = 'customer';
+
+    fetch('/api/user/regular/signup/password', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

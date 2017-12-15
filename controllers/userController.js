@@ -4,8 +4,8 @@ const Company = mongoose.model('Company');
 const passport = require('passport');
 const escapeStringRegexp = require('escape-string-regexp');
 
-const {UserStatus, UserScope} = require('../models/User.js');
-const {CompanyStatus, BusinessType} = require('../models/Company.js');
+const { UserStatus, UserScope } = require('../models/User.js');
+const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -87,8 +87,8 @@ exports.signupRegularPassword = (req, res) => {
 
   new User({ email, first_name, last_name, status: UserStatus.Active, scope: UserScope.Customer })
     .create(password)
-    .then(({auth_token}) => {
-      res.status(201).send({auth_token});
+    .then(({ auth_token }) => {
+      res.status(201).send({ auth_token });
     })
     .catch((err) => {
       console.error(err);
@@ -120,6 +120,7 @@ exports.signupOwnerPassword = (req, res) => {
 exports.signup = async (req, res, next) => {
   const { email, first_name, last_name, password } = req.body;
   const user = new User({ email, first_name, last_name });
+
   await User.register(user, password, (err, user) => {
     if (err) return console.log(err);
     next();
@@ -127,14 +128,17 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.loginWithPassword = (req, res) => {
-  const {email, scan_code, scope, auth_token} = req.user;
+  console.log(req.body);
+  const { email, scan_code, scope, auth_token } = req.user;
+
   res.status(200).json({email, scan_code, scope, auth_token});
 };
 
 exports.getMe = (req, res, next) => {
-  const {scan_code, scope, company} = req.user;
+  const { scan_code, scope, company, first_name, last_name, email } = req.user;
   const company_id = company ? company._id : null;
-  res.status(200).json({scan_code, scope, company_id});
+
+  res.status(200).json({ scan_code, scope, company_id, first_name, last_name, email });
 };
 
 exports.logout = (req, res, next) => {

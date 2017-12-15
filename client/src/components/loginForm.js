@@ -36,7 +36,7 @@ export default class LoginForm extends Component {
 
     const body = {...this.state}
 
-    fetch('/api/login', {
+    fetch('/api/user/login/password', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

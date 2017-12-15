@@ -47,6 +47,7 @@ const userSchema = new Schema({
   },
   status: {
     type: Number,
+    default: 0,
     require: 'Please provide status.'
   },
   scope: {
