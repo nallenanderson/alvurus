@@ -10,6 +10,11 @@
     "port": "5000"
   },
   "modules": {
+    "companies": {
+      "list": {
+        "pageSize": 10 
+      }
+    },
     "users": {
       "password": {
         "hash": "sha256",

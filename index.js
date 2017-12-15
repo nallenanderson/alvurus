@@ -31,6 +31,7 @@ app.use(passport.initialize());
 // ROUTES
 require('./routes/apiRoutes')(app);
 require('./routes/userRoutes')(app);
+require('./routes/companyRoutes')(app);
 
 // PROD VS. DEV
 if (process.env.NODE_ENV === 'production') {

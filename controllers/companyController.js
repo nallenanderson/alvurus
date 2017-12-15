@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const User = mongoose.model('User');
+const config = require('config');
 const Company = mongoose.model('Company');
 const escapeStringRegexp = require('escape-string-regexp');
-
-const {UserStatus, UserScope} = require('../models/User.js');
 const {CompanyStatus, BusinessType} = require('../models/Company.js');
+
+const ListPageSize = config.get('modules.companies.list.pageSize');
 
 const saveCompany = ({company_name, company_address, business_type}) => {
 
@@ -48,7 +48,29 @@ module.exports.validateCompany = (req, res, next) => {
   });
 }
 
-exports.get = (req, res, next) => {
-  const {auth_token, scan_code, scope} = req.user;
-  res.status(200).json({auth_token, scan_code, scope});
+exports.list = (req, res) => {
+
+  const { page, business_type } = req.params
+  const skip = ListPageSize * page;
+  const status = CompanyStatus.Active;
+  const query = { status };
+
+  if (business_type) {
+    query = Object.assign(query, {business_type});
+  }
+
+  Company
+    .find(query, 'name address business_type',{ skip, limit: ListPageSize })
+    .exec()
+    .then((companies) => {
+
+      res.status(200).json(companies.map(({_id: id, name, address, business_type}) => {
+        return {id, name, address, business_type}
+      }));
+
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500);
+    })
 };

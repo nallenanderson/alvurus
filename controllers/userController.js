@@ -127,13 +127,14 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.loginWithPassword = (req, res) => {
-  const {email, scan_code, scope} = req.user;
-  res.status(200).json({email, scan_code, scope});
+  const {email, scan_code, scope, auth_token} = req.user;
+  res.status(200).json({email, scan_code, scope, auth_token});
 };
 
 exports.getMe = (req, res, next) => {
-  const {auth_token, scan_code, scope} = req.user;
-  res.status(200).json({auth_token, scan_code, scope});
+  const {scan_code, scope, company} = req.user;
+  const company_id = company ? company._id : null;
+  res.status(200).json({scan_code, scope, company_id});
 };
 
 exports.logout = (req, res, next) => {
