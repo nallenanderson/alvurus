@@ -107,9 +107,9 @@ exports.signupOwnerPassword = (req, res) => {
         .create(password);
     })
     .then((user) => {
-      const {auth_token, company} = user;
-      const {_id: company_id} = company;
-      res.status(201).send({auth_token, company_id});
+      const { auth_token, company } = user;
+      const { _id: company_id } = company;
+      res.status(201).send({ auth_token, company_id });
     })
     .catch((err) => {
       console.error(err);
@@ -128,10 +128,9 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.loginWithPassword = (req, res) => {
-  console.log(req.body);
   const { email, scan_code, scope, auth_token } = req.user;
 
-  res.status(200).json({email, scan_code, scope, auth_token});
+  res.status(200).json({ email, scan_code, scope, auth_token });
 };
 
 exports.getMe = (req, res, next) => {

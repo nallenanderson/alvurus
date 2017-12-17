@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const config = require('config');
 
-const {connections, cookies } = config;
+const { connections, cookies } = config;
 
 require('./models/Company');
 require('./models/User');
@@ -17,16 +17,7 @@ mongoose.connect(connections.core, { useMongoClient: true });
 const app = express();
 
 app.use(bodyParser.json());
-
-// app.use(
-//   cookieSession({
-//     maxAge: 30 * 24 * 60 * 60 * 1000,
-//     keys: [cookies.key]
-//   })
-// );
-
 app.use(passport.initialize());
-//app.use(passport.session());
 
 // ROUTES
 require('./routes/apiRoutes')(app);

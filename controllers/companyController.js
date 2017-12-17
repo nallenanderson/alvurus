@@ -2,18 +2,18 @@ const mongoose = require('mongoose');
 const config = require('config');
 const Company = mongoose.model('Company');
 const escapeStringRegexp = require('escape-string-regexp');
-const {CompanyStatus, BusinessType} = require('../models/Company.js');
+const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const ListPageSize = config.get('modules.companies.list.pageSize');
 
-const saveCompany = ({company_name, company_address, business_type}) => {
+const saveCompany = ({ company_name, company_address, business_type }) => {
 
   const status = CompanyStatus.Active;
 
   return new Company({ business_type, status, name: company_name, address: company_address }).save();
 };
 
-module.exports.validateCompany = (req, res, next) => {
+exports.validateCompany = (req, res, next) => {
 
   const { company_name, company_address, business_type } = req.body;
 

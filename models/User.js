@@ -60,7 +60,7 @@ const userSchema = new Schema({
   },
 });
 
-const {hash, hashInputEncoding, hashOutputEncoding} = config.get('modules.users.password');
+const { hash, hashInputEncoding, hashOutputEncoding } = config.get('modules.users.password');
 
 const generateHash = (email, password) => {
 
