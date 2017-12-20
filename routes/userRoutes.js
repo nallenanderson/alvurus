@@ -97,17 +97,12 @@ module.exports = (app) => {
   );
 
   app.get('/api/user/login/facebook',
-    passport.authenticate('facebook', { session: false }),
+    userController.validateFacebook,
     userController.loginWithFacebook
   );
 
   app.post('/api/user/login/facebook',
-    passport.authenticate('facebook', { session: false, scope: ['id', 'username', 'displayName', 'name', 'gender', 'profileUrl', 'emails', 'photos'] }),
-    userController.loginWithFacebook
-  );
-
-  app.get('/api/user/login/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/api/user/login/facebook', session: false } ),
+    userController.validateFacebook,
     userController.loginWithFacebook
   );
 

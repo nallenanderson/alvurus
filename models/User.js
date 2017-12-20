@@ -17,7 +17,7 @@ const UserScope = {
 const userSchema = new Schema({
   email: {
     type: String,
-    unique: true,
+    //unique: true,
     lowercase: true,
     trim: true,
     //validate: [validator.isEmail, 'Invalid Email Address'],
@@ -95,13 +95,11 @@ userSchema.methods.create = function(password) {
 };
 
 userSchema.methods.generateHash = function(password) {
-  debugger
   const model = this.toObject();
   return generateHash(model.email, password);
 };
 
 userSchema.methods.validPassword = function(password) {
-  debugger
   const model = this.toObject();
   return generateHash(model.email, password) === model.password;
 };

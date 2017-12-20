@@ -146,59 +146,84 @@ const sendLoginSuccess = (res, { email, scan_code, scope, auth_token }) => {
   res.status(200).json({ email, scan_code, scope, auth_token });
 };
 
+module.exports.validateFacebook = async (req, res, next) => {
+
+  const { access_token, user_id } = req.body;
+  const fbUrl = facebookUrl(user_id, { access_token, fields:'id,name,email,birthday,gender,locale' });
+
+  if (!access_token || !access_token.trim()) {
+    return res.status(400).send({ message: 'You must supply a access_token. Try again.' });
+  }
+  if (!user_id || !user_id.trim()) {
+    return res.status(400).send({ message: 'You must supply a user_id. Try again.' });
+  }
+
+  User
+    .findOne({ 'facebook.user_id': user_id })
+    .then((usr) => {
+
+      if (!usr) {
+
+        return new Promise((resolve, reject) => {
+
+          https.get(fbUrl, (res) => {
+
+            const { statusCode } = res
+
+            if (statusCode !== 200) {
+              console.warning(`invalid status code from FB get profile ${statusCode}`);
+              return res.status(500);
+            }
+
+            res.on('error', reject);
+            res.on('data', (data) => {
+              req.profile = JSON.parse(data.toString());
+              resolve();
+            });
+          })
+        });
+
+      }
+      sendLoginSuccess(res, usr);
+    })
+    .then(next)
+    .catch((err) => {
+      console.warning(err);
+      return res.status(500);
+    });
+};
+
 module.exports.loginWithFacebook = async (req, res) => {
 
-  debugger
+  const { access_token, expires_in, user_id } = req.body;
+  const { name, gender, locale, email } = req.profile;
+  const [ first_name, last_name ] = name.split(' ');
+  const image_url = facebookUrl(`${user_id}/picture`)
+  const status = UserStatus.Active;
+  const scope = UserScope.Customer;
 
-  const { access_token, expires_in, signed_request, user_id } = req.body;
-  let { user } = req;
-  //const fbUrl = facebookUrl(user_id, {access_token, fields:'id,name,email,birthday,gender,locale'});
+  const user = new User({
+    email,
+    first_name,
+    last_name,
+    status,
+    scope,
+    facebook: {
+      access_token,
+      expires_in,
+      user_id,
+      image_url,
+      name,
+      gender
+    }
+  });
 
-  //debugger
-
-  // https
-  //   .get(fbUrl, (res) => {
-  //
-  //     const { statusCode } = res;
-  //
-  //     if (statusCode !== 200) {
-  //       console.error(err);
-  //       return res.status(500);
-  //     }
-  //     res.on('error', (err) => {
-  //       console.error(err);
-  //       return res.status(500);
-  //     });
-  //     res.on('data', (data) => {
-  //       JSON.parse(data.toString());
-  //     });
-  //
-  //   });
-
-  debugger
-
-  // this means user auth with facebook by first time
-  if (!user._id) {
-
-    const { email, first_name, last_name, gender, name, middle_name } = req.authInfo.profile;
-    const image_url = facebookUrl(`${user_id}/picture`)
-
-    await (user = new User({
-      email, first_name, last_name, facebook: { access_token, expires_in,
-        signed_request, user_id, image_url, name, gender },
-        status: UserStatus.Active, scope: UserScope.Costumer })
-    ).create();
-
-  }
+  await user.create();
 
   sendLoginSuccess(res, user);
 };
 
-exports.loginWithPassword = (req, res) => {
-  const { email, scan_code, scope, auth_token } = req.user;
-
-  res.status(200).json({ email, scan_code, scope, auth_token });
-};
+exports.loginWithPassword = (req, res) => sendLoginSuccess(res, req.user)
 
 exports.getMe = (req, res, next) => {
   const { scan_code, scope, company, first_name, last_name, email } = req.user;
