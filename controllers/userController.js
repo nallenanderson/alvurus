@@ -3,11 +3,15 @@ const User = mongoose.model('User');
 const Company = mongoose.model('Company');
 const passport = require('passport');
 const escapeStringRegexp = require('escape-string-regexp');
+const url = require('url');
+const https = require('https');
 
 const { UserStatus, UserScope } = require('../models/User.js');
 const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
 
 module.exports.validateUser = (req, res, next) => {
 
@@ -125,6 +129,69 @@ exports.signup = async (req, res, next) => {
     if (err) return console.log(err);
     next();
   });
+};
+
+
+const facebookUrl = (path, args) => {
+
+  const fUrl = url.parse('https://graph.facebook.com/');
+
+  if (path && path.length > 0) fUrl.pathname = path;
+  if (args) fUrl.query = args;
+
+  return fUrl.format()
+}
+
+const sendLoginSuccess = (res, { email, scan_code, scope, auth_token }) => {
+  res.status(200).json({ email, scan_code, scope, auth_token });
+};
+
+module.exports.loginWithFacebook = async (req, res) => {
+
+  debugger
+
+  const { access_token, expires_in, signed_request, user_id } = req.body;
+  let { user } = req;
+  //const fbUrl = facebookUrl(user_id, {access_token, fields:'id,name,email,birthday,gender,locale'});
+
+  //debugger
+
+  // https
+  //   .get(fbUrl, (res) => {
+  //
+  //     const { statusCode } = res;
+  //
+  //     if (statusCode !== 200) {
+  //       console.error(err);
+  //       return res.status(500);
+  //     }
+  //     res.on('error', (err) => {
+  //       console.error(err);
+  //       return res.status(500);
+  //     });
+  //     res.on('data', (data) => {
+  //       JSON.parse(data.toString());
+  //     });
+  //
+  //   });
+
+  debugger
+
+  // this means user auth with facebook by first time
+  if (!user._id) {
+
+    const { email, first_name, last_name, gender, name, middle_name } = req.authInfo.profile;
+    const image_url = facebookUrl(`${user_id}/picture`)
+
+    await (user = new User({
+      email, first_name, last_name, facebook: { access_token, expires_in,
+        signed_request, user_id, image_url, name, gender },
+        status: UserStatus.Active, scope: UserScope.Costumer })
+    ).create();
+
+  }
+
+  sendLoginSuccess(res, user);
 };
 
 exports.loginWithPassword = (req, res) => {

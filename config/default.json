@@ -9,10 +9,19 @@
   "server": {
     "port": "5000"
   },
+  "apps": {
+    "facebook": {
+      "clientID": "101244567339658",
+      "clientSecret": "8a00a201be5b3405b8e59b6076cdbd41",
+      "callbackURL": "http://localhost:5000/api/user/login/facebook/callback",
+      "passReqToCallback" : true,
+      "profileFields": ["email"]
+    }
+  },
   "modules": {
     "companies": {
       "list": {
-        "pageSize": 10 
+        "pageSize": 10
       }
     },
     "users": {

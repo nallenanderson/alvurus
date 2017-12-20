@@ -20,8 +20,8 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true,
-    validate: [validator.isEmail, 'Invalid Email Address'],
-    required: 'Please provide an email address.'
+    //validate: [validator.isEmail, 'Invalid Email Address'],
+    //required: 'Please provide an email address.'
   },
   first_name: {
     type: String,
@@ -39,7 +39,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     trim: true,
-    required: 'Please provide a password.'
+    //required: 'Please provide a password.'
   },
   scan_code: {
     type: String,
@@ -58,6 +58,16 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Company'
   },
+  facebook:{
+    user_id: String,
+    access_token: String,
+    expires_in: Number,
+    signed_request: String,
+    image_url: String,
+    gender: String,
+    name: String,
+    image_url: String
+  }
 });
 
 const { hash, hashInputEncoding, hashOutputEncoding } = config.get('modules.users.password');
@@ -74,7 +84,11 @@ userSchema.methods.create = function(password) {
 
   this.auth_token = uuidv4();
   this.scan_code = uuidv4()
-  this.password = this.generateHash(password);
+
+  // users login with an app does not have a password
+  if (password) {
+    this.password = this.generateHash(password);
+  }
 
   return this.save();
 
