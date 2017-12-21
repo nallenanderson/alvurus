@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import DatePicker from './datePicker';
 import HourPicker from './hourPicker';
 
-export default class App extends Component {
+class App extends Component {
 
   createUser = () => {
     const body = {
@@ -24,7 +26,10 @@ export default class App extends Component {
     }).then(data => data.json())
       .then(res => console.log(res));
   }
+
   render() {
+    if (!this.props.auth_token) return <Redirect to="/" />
+
     return (
       <div className="infinity__section">
         <div className="reservation__form">
@@ -37,3 +42,9 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps ({ auth }) {
+  return { auth_token: auth.auth_token };
+}
+
+export default connect(mapStateToProps)(App);

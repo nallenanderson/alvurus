@@ -3,8 +3,11 @@ const mongoose = require('mongoose');
 const config = require('config');
 const { Strategy: LocalStrategy } = require('passport-local').Strategy;
 const { Strategy: BearerStrategy } = require('passport-http-bearer').Strategy;
+
 const User = mongoose.model('User');
-const {UserStatus} = require('../models/User');
+const { UserStatus } = require('../models/User');
+
+const environment = !process.env.PORT ? 'http://localhost:5000' : 'https://socialscan.herokuapp.com';
 
 passport.use('bearer', new BearerStrategy(
   (auth_token, done) => {

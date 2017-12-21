@@ -3,9 +3,7 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const config = require('config');
-
-const { connections, cookies } = config;
+const { connections, cookies } = require('config');
 
 require('./models/Company');
 require('./models/User');

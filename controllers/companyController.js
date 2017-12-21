@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('config');
 const Company = mongoose.model('Company');
+const User = mongoose.model('User');
 const escapeStringRegexp = require('escape-string-regexp');
 const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
