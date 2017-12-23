@@ -16,13 +16,6 @@ const companySchema = new Schema({
     trim: true,
     require: 'Please provide company name.'
   },
-
-  // Creo que podemos incluir company address con los locales, no?
-  address: {
-    type: String,
-    trim: true,
-    require: 'Please provide company address.'
-  },
   status: {
     type: Number,
     require: 'Please provide company status.'

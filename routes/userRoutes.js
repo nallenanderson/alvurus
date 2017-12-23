@@ -23,30 +23,6 @@ module.exports = (app) => {
               FB.AppEvents.logPageView();
               FB.login(function(res) {
 
-                /*
-
-                var data = {
-                  "access_token": res.authResponse.accessToken,
-                  "expires_in": res.authResponse.expiresIn,
-                  "signed_request": res.authResponse.signedRequest,
-                  "user_id": res.authResponse.userID
-                };
-
-                $.get({url:"http://localhost:5000/api/user/login/facebook", data: data}).success(function(resfb) {
-                  alert(resfb);
-                });
-
-                */
-
-                /*
-                var data = [
-                  "access_token=" + res.authResponse.accessToken,
-                  "expires_in=" + res.authResponse.expiresIn,
-                  "signed_request=" + res.authResponse.signedRequest,
-                  "user_id=" + res.authResponse.userID
-                ].join("&")
-                */
-
                 var data = {
                   "access_token": res.authResponse.accessToken,
                   "expires_in": res.authResponse.expiresIn,
@@ -59,7 +35,7 @@ module.exports = (app) => {
                 r.setRequestHeader("Content-Type", "application/json");
                 r.onreadystatechange = function () {
                   if (r.readyState != 4 || r.status != 200) return;
-                    alert(resfb);
+                  alert(r.response);
                 };
                 r.send(JSON.stringify(data));
 

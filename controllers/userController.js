@@ -11,7 +11,19 @@ const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+module.exports.enforceScope = (scope) => {
 
+  return (req, res, next) => {
+
+    const { user } = req;
+
+    if (user && user.scope === scope) {
+      return next();
+    }
+    res.status(401);
+  };
+
+};
 
 module.exports.validateUser = (req, res, next) => {
 
