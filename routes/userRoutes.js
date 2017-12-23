@@ -63,7 +63,7 @@ module.exports = (app) => {
 
   app.post('/api/user/owner/signup/password',
     userController.validateUser,
-    companyController.validateCompany,
+    userController.validateCompany,
     userController.signupOwnerPassword
   );
 
@@ -83,7 +83,7 @@ module.exports = (app) => {
   );
 
   app.get('/api/user/me',
-    passport.authenticate('bearer', {session: false}),
+    passport.authenticate('bearer', { session: false }),
     userController.getMe
   );
 

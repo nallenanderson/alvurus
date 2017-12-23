@@ -8,6 +8,7 @@ const { Schema }  = mongoose;
 const UserStatus = {
   Active: 0
 };
+
 const UserScope = {
   Owner: 'owner',
   Employee: 'employee',
@@ -17,11 +18,11 @@ const UserScope = {
 const userSchema = new Schema({
   email: {
     type: String,
-    //unique: true,
+    unique: true,
     lowercase: true,
     trim: true,
-    //validate: [validator.isEmail, 'Invalid Email Address'],
-    //required: 'Please provide an email address.'
+    validate: [validator.isEmail, 'Invalid Email Address'],
+    required: 'Please provide an email address.'
   },
   first_name: {
     type: String,
@@ -66,7 +67,6 @@ const userSchema = new Schema({
     image_url: String,
     gender: String,
     name: String,
-    image_url: String
   }
 });
 

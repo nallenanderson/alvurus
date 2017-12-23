@@ -11,6 +11,9 @@ $white = #FFFFFF
 a, a:focus, a:hover
   text-decoration: none
 
+h1, h2, h3, h4, h5
+  margin: 0
+
 @keyframes grow {
   0%, 75% {
     transform: scale(1);
@@ -60,7 +63,7 @@ body
   background: #FFFFFF
   box-shadow: 0 2px 4px rgba($black, 0.3)
   min-width: 400px
-  padding: 40px
+  padding: 25px 40px
 
 .SingleDatePicker
   width: 100%
@@ -86,7 +89,6 @@ body
     display: block
     margin-bottom: 20px
     padding: 10px 0
-    // height: 48px
     line-height: 24px
     font-size: 1rem
     border: none
@@ -124,6 +126,11 @@ body
   font-family: $font
   text-transform: uppercase
   transition: 0.2s ease-in-out
+  display: block
+  text-align: center
+  &.fb__button
+    background: #3d5c95
+    border-color: #3d5c95
   &:hover
     opacity: 0.6
 
@@ -141,3 +148,46 @@ body
   text-transform: uppercase
   letter-spacing: 1px
   border-bottom: 1px solid #ccc
+
+p
+  font-size: 1rem
+
+.fixed__header
+  background: #212121
+  color: #fcfcfc
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  width: 100%
+  .container
+    display: flex
+    width: 100%
+    .brand__link
+      flex: 1
+      display: flex
+      justify-content: center
+      align-items: center
+      font-size: 1.1rem
+    a
+      color: #fcfcfc
+      padding: 18px 30px
+      display: block
+      font-size: 0.8rem
+      letter-spacing: 3px
+    ul
+      flex: 6
+      list-style: none
+      display: flex
+      text-align: right
+      justify-content: flex-end
+
+.container
+  padding: 0 120px
+
+.error__message
+  text-align: center
+  font-size: 0.8rem
+  font-weight: bold
+  letter-spacing: 2px
+  color: red

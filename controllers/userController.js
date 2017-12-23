@@ -62,9 +62,10 @@ module.exports.validateUser = (req, res, next) => {
   });
 };
 
-module.exports.validateCompany = (req, res, next) => {
+// Is this necessary? I think this is being called in  companyController.js.
+exports.validateCompany = (req, res, next) => {
 
-  const { company_name, company_address, business_type } = req.body;
+  const { company_name } = req.body;
 
   if (!company_name || !company_name.trim()) {
     return res.status(400).send({ message: 'You must supply a company_name. Try again.' });
@@ -158,13 +159,13 @@ const sendLoginSuccess = (res, { email, scan_code, scope, auth_token }) => {
   res.status(200).json({ email, scan_code, scope, auth_token });
 };
 
-module.exports.validateFacebook = async (req, res, next) => {
+exports.validateFacebook = async (req, res, next) => {
 
   const { access_token, user_id } = req.body;
-  const fbUrl = facebookUrl(user_id, { access_token, fields:'id,name,email,birthday,gender,locale' });
+  const fbUrl = facebookUrl(user_id, { access_token, fields:'id,name,email,gender,picture.width(400).height(400)' });
 
   if (!access_token || !access_token.trim()) {
-    return res.status(400).send({ message: 'You must supply a access_token. Try again.' });
+    return res.status(400).send({ message: 'You must supply an access_token. Try again.' });
   }
   if (!user_id || !user_id.trim()) {
     return res.status(400).send({ message: 'You must supply a user_id. Try again.' });
@@ -205,14 +206,14 @@ module.exports.validateFacebook = async (req, res, next) => {
     });
 };
 
-module.exports.loginWithFacebook = async (req, res) => {
-
-  const { access_token, expires_in, user_id } = req.body;
-  const { name, gender, locale, email } = req.profile;
+exports.loginWithFacebook = async (req, res) => {
+  console.log(req.profile);
+  const { access_token, expires_in, user_id, user_scope } = req.body;
+  const { name, gender, email, picture } = req.profile;
   const [ first_name, last_name ] = name.split(' ');
-  const image_url = facebookUrl(`${user_id}/picture`)
+  const image_url = picture.data.url
   const status = UserStatus.Active;
-  const scope = UserScope.Customer;
+  const scope = user_scope === 'customer' ? UserScope.Customer : UserScope.Owner;
 
   const user = new User({
     email,

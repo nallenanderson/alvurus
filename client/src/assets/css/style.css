@@ -8,6 +8,13 @@ a:focus,
 a:hover {
   text-decoration: none;
 }
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
 body {
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
@@ -49,7 +56,7 @@ body {
   -webkit-box-shadow: 0 2px 4px rgba(33,33,33,0.3);
           box-shadow: 0 2px 4px rgba(33,33,33,0.3);
   min-width: 400px;
-  padding: 40px;
+  padding: 25px 40px;
 }
 .SingleDatePicker {
   width: 100%;
@@ -119,6 +126,12 @@ body {
   text-transform: uppercase;
   -webkit-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
+  display: block;
+  text-align: center;
+}
+.submit__button.fb__button {
+  background: #3d5c95;
+  border-color: #3d5c95;
 }
 .submit__button:hover {
   opacity: 0.6;
@@ -137,6 +150,69 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
   border-bottom: 1px solid #ccc;
+}
+p {
+  font-size: 1rem;
+}
+.fixed__header {
+  background: #212121;
+  color: #fcfcfc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.fixed__header .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+}
+.fixed__header .container .brand__link {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 1.1rem;
+}
+.fixed__header .container a {
+  color: #fcfcfc;
+  padding: 18px 30px;
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+}
+.fixed__header .container ul {
+  -webkit-box-flex: 6;
+      -ms-flex: 6;
+          flex: 6;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  text-align: right;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.container {
+  padding: 0 120px;
+}
+.error__message {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #f00;
 }
 @-webkit-keyframes grow {
   0%, 75% {

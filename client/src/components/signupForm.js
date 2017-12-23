@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import FacebookAuth from 'react-facebook-auth';
+import { connect } from 'react-redux';
 
+import * as actions from '../actions';
 import InputField from './inputField';
+import FBLoginButton from './fbLoginButton';
 
 const FIELDS = [
   {
@@ -36,8 +40,12 @@ const FIELDS = [
   }
 ]
 
-export default class SignupForm extends Component {
+class SignupForm extends Component {
   state = {};
+
+  componentDidMount() {
+    this.props.ownerLogin();
+  }
 
   updateField = (value, name) => {
     if (!value) return;
@@ -51,33 +59,55 @@ export default class SignupForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
+    this.setState({ loginText: 'Signing up...', error: null });
 
-    const body = {...this.state};
+    const body = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+      password: this.state.password
+    };
 
-    body.status = 'customer';
+    if (this.state.password !== this.state.confirm_password) {
+      return this.setState({ error: 'Passwords do not match.' });
+    }
 
-    fetch('/api/user/regular/signup/password', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    }).then(data => data.json()).then(res => console.log(res))
+    const user = await this.props.getOwnerLogin(
+      '/api/user/regular/signup/password',
+      'POST',
+      body
+    );
+
+    if (user.message) {
+      return this.setState({ error: user.message });
+    }
   }
 
   render() {
+    if (this.props.auth_token) return <Redirect to="/account" />
+
     return(
       <form className="reservation__form" onSubmit={this.handleSubmit}>
-        <h1 className="centered">Login</h1>
+        <h1 className="centered">Sign up</h1>
         { this.renderInput() }
-        <button type="submit" className="submit__button">Sign in</button>
+        <button type="submit" className="submit__button">Sign up</button>
         <div className="separator"></div>
-        <p>
-          Don't have an account? <Link to="/signup" className="page__link">Sign up!</Link>
-        </p>
-        <a href="/api/logout" className="centered page__link">Logout</a>
+        <FacebookAuth
+          appId="410759349341376"
+          callback={(res) => this.props.loginFB(res)}
+          component={FBLoginButton}
+        />
+          {
+            this.state.error ?
+            <p className="error__message">{this.state.error}</p> : null
+          }
       </form>
     )
   }
 }
+
+function mapStateToProps({ auth }) {
+  return { auth_token: auth.auth_token };
+}
+
+export default connect(mapStateToProps, actions)(SignupForm)

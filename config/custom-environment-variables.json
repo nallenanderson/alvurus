@@ -6,6 +6,8 @@
     "key": "COOKIE_KEY",
     "secret": "COOKIE_SECRET"
   },
+  "fbClientID": "410759349341376",
+  "fbClientSecret": "aa14643af26d1fe63b81f5a803738a03",
   "server": {
     "port": "PORT"
   },
