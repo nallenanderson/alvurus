@@ -7,7 +7,7 @@ const { CompanyStatus, BusinessType } = require('../models/Company');
 
 const ListPageSize = config.get('modules.companies.list.pageSize');
 
-exports.validateCompany = (req, res, next) => {
+exports.validate = (req, res, next) => {
 
   const { company_name, business_type } = req.body;
 
@@ -70,12 +70,14 @@ exports.list = (req, res) => {
 
 exports.enforceCompanyAccess = async (req, res, next) => {
 
+    debugger
+
     const { companyId } = req.params;
     const { company } = req.user;
 
     if (company && String(company._id) === companyId) {
       return next();
     }
-    res.status(401);
+    res.status(401).end();
 
 };

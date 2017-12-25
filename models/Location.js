@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const { Schema }  = mongoose;
 
-const LocationStatus = {
+const Status = {
   Active: 0,
   Deleted: 1
 };
@@ -31,7 +31,7 @@ const modelSchema = new Schema({
 modelSchema.statics.excludeDeleted = function(query) {
   return Object.assign(query, {
     status: {
-      $ne : LocationStatus.Deleted
+      $ne : Status.Deleted
     }
   });
 };
@@ -39,4 +39,4 @@ modelSchema.statics.excludeDeleted = function(query) {
 const Model = mongoose.model('Location', modelSchema);
 
 
-module.exports = { LocationStatus, Location: Model };
+module.exports = { LocationStatus: Status, Location: Model };

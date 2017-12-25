@@ -9,10 +9,15 @@ const ListPageSize = config.get('modules.locations.list.pageSize');
 
 exports.validate = (req, res, next) => {
 
-  const { id, name, address } = req.body;
+  const { name, address } = req.body;
+  const { id } = req.params;
   const creating = !id;
 
   if (creating) {
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ message: 'You must supply a valid id.' });
+    }
 
     if (!name || !name.trim()) {
       return res.status(400).send({ message: 'You must supply a name. Try again.' });
@@ -43,7 +48,7 @@ exports.save = async (req, res) => {
     location = await Location.findOne(query).populate('company');
 
     if (!location) {
-      return res.status(404).send();
+      return res.status(404).end();
     }
 
     if (name && name.trim()) location.name = name;

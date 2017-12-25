@@ -3,7 +3,9 @@ const validator = require('validator');
 const { Schema }  = mongoose;
 
 const Status = {
-  Active: 0
+  Active: 0,
+  Inactive: 1,
+  Deleted: 2
 };
 
 const modelSchema = new Schema({
@@ -30,6 +32,14 @@ const modelSchema = new Schema({
     require: 'Please provide promo date.'
   }
 });
+
+modelSchema.statics.excludeDeleted = function(query) {
+  return Object.assign(query, {
+    status: {
+      $ne : Status.Deleted
+    }
+  });
+};
 
 const Model = mongoose.model('Promo', modelSchema);
 

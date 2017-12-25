@@ -57,13 +57,13 @@ module.exports = (app) => {
   })
 
   app.post('/api/user/regular/signup/password',
-    userController.validateUser,
+    userController.validate,
     userController.signupRegularPassword
   );
 
   app.post('/api/user/owner/signup/password',
-    userController.validateUser,
-    userController.validateCompany,
+    userController.validate,
+    companyController.validate,
     userController.signupOwnerPassword
   );
 
