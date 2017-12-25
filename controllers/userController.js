@@ -5,19 +5,22 @@ const passport = require('passport');
 const escapeStringRegexp = require('escape-string-regexp');
 const url = require('url');
 const https = require('https');
+const { indexOf } = require('lodash');
 
 const { UserStatus, UserScope } = require('../models/User.js');
 const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-module.exports.enforceScope = (scope) => {
+module.exports.enforceScope = function() {
+
+  const scopes = arguments;
 
   return (req, res, next) => {
 
     const { user } = req;
 
-    if (user && user.scope === scope) {
+    if (user && indexOf(scopes, user.scope) != -1) {
       return next();
     }
     res.status(401);

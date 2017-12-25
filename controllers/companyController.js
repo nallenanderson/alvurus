@@ -1,21 +1,11 @@
 const mongoose = require('mongoose');
 const config = require('config');
 const Company = mongoose.model('Company');
-const Location = mongoose.model('Location');
 const User = mongoose.model('User');
 const escapeStringRegexp = require('escape-string-regexp');
 const { CompanyStatus, BusinessType } = require('../models/Company');
-const { LocationStatus } = require('../models/Location');
-const { pick } = require('lodash');
 
 const ListPageSize = config.get('modules.companies.list.pageSize');
-
-const saveCompany = ({ company_name, company_address, business_type }) => {
-
-  const status = CompanyStatus.Active;
-
-  return new Company({ business_type, status, name: company_name, address: company_address }).save();
-};
 
 exports.validateCompany = (req, res, next) => {
 
@@ -50,13 +40,16 @@ exports.validateCompany = (req, res, next) => {
 
 exports.list = (req, res) => {
 
-  const { page, business_type } = req.params
-  const skip = ListPageSize * page;
-  const status = CompanyStatus.Active;
-  const query = { status };
+  const { page, status, business_type } = req.query;
+  const skip = page >= 0 ? ListPageSize * page : 0;
+  let query = { };
+
+  if (status >= 0) {
+    query = Object.assign(query, { status });
+  }
 
   if (business_type) {
-    query = Object.assign(query, {business_type});
+    query = Object.assign(query, { business_type });
   }
 
   Company
@@ -84,54 +77,5 @@ exports.enforceCompanyAccess = async (req, res, next) => {
       return next();
     }
     res.status(401);
-
-};
-
-exports.validateLocation = (req, res, next) => {
-
-  const { id, name, address } = req.body;
-  const creating = !id;
-
-  if (creating) {
-
-    if (!name || !name.trim()) {
-      return res.status(400).send({ message: 'You must supply a name. Try again.' });
-    }
-
-    if (!address) {
-      return res.status(400).send({ message: 'You must supply a address. Try again.' });
-    }
-  }
-  next();
-};
-
-exports.saveLocation = async (req, res) => {
-
-  const { name, address } = req.body;
-  const { companyId: company, id: _id } = req.params;
-  const creating = !_id;
-  const status = LocationStatus.Active;
-  let location;
-
-  if (creating) {
-    location = new Location({ company, name, address, status });
-  }
-  else {
-
-    location = await Location.findOne({ company, _id }).populate('company');
-
-    if (!location) {
-      return res.status(404).send({ message: 'Location not found.' });
-    }
-
-    if (name && name.trim()) location.name = name;
-    if (address && address.trim()) location.address = address;
-
-  }
-  await location.save();
-
-  const { id } = location;
-
-  res.status(200).json(Object.assign({ id } , pick(location, ['address', 'name', 'status'])));
 
 };

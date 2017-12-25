@@ -3,7 +3,8 @@ const validator = require('validator');
 const { Schema }  = mongoose;
 
 const LocationStatus = {
-  Active: 0
+  Active: 0,
+  Deleted: 1
 };
 
 const modelSchema = new Schema({
@@ -27,6 +28,15 @@ const modelSchema = new Schema({
   }
 });
 
+modelSchema.statics.excludeDeleted = function(query) {
+  return Object.assign(query, {
+    status: {
+      $ne : LocationStatus.Deleted
+    }
+  });
+};
+
 const Model = mongoose.model('Location', modelSchema);
+
 
 module.exports = { LocationStatus, Location: Model };
