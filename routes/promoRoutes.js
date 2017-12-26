@@ -28,6 +28,20 @@ module.exports = (app) => {
     promoController.save
   );
 
+  app.post('/api/company/:companyId/promo/:id/activate',
+    passport.authenticate('bearer', {session: false}),
+    userController.enforceScope(UserScope.Owner),
+    companyController.enforceCompanyAccess,
+    promoController.activate
+  );
+
+  app.post('/api/company/:companyId/promo/:id/deactivate',
+    passport.authenticate('bearer', {session: false}),
+    userController.enforceScope(UserScope.Owner),
+    companyController.enforceCompanyAccess,
+    promoController.deactivate
+  );
+
   // TODO: What rules applies to updating a promo?
   // app.post('/api/company/:companyId/promo/:id',
   //   passport.authenticate('bearer', {session: false}),

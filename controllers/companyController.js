@@ -70,10 +70,10 @@ exports.list = (req, res) => {
 
 exports.enforceCompanyAccess = async (req, res, next) => {
 
-    debugger
-
     const { companyId } = req.params;
     const { company } = req.user;
+
+    debugger
 
     if (company && String(company._id) === companyId) {
       return next();

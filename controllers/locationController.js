@@ -15,16 +15,18 @@ exports.validate = (req, res, next) => {
 
   if (creating) {
 
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).send({ message: 'You must supply a valid id.' });
-    }
-
     if (!name || !name.trim()) {
       return res.status(400).send({ message: 'You must supply a name. Try again.' });
     }
 
     if (!address) {
       return res.status(400).send({ message: 'You must supply an address. Try again.' });
+    }
+  }
+  else {
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ message: 'You must supply a valid id.' });
     }
   }
   next();
@@ -112,6 +114,6 @@ exports.delete = async (req, res) => {
     res.status(404).end();
   }
   location.status = LocationStatus.Deleted;
-  location.save();
+  await location.save();
   res.status(200).json(({id, name, address, status, company} = location));
 };
