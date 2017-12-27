@@ -3,27 +3,16 @@ const config = require('config');
 const Company = mongoose.model('Company');
 const User = mongoose.model('User');
 const escapeStringRegexp = require('escape-string-regexp');
-const { CompanyStatus, BusinessType } = require('../models/Company.js');
+const { CompanyStatus, BusinessType } = require('../models/Company');
 
 const ListPageSize = config.get('modules.companies.list.pageSize');
 
-const saveCompany = ({ company_name, company_address, business_type }) => {
+exports.validate = (req, res, next) => {
 
-  const status = CompanyStatus.Active;
-
-  return new Company({ business_type, status, name: company_name, address: company_address }).save();
-};
-
-exports.validateCompany = (req, res, next) => {
-
-  const { company_name, company_address, business_type } = req.body;
+  const { company_name, business_type } = req.body;
 
   if (!company_name || !company_name.trim()) {
     return res.status(400).send({ message: 'You must supply a company_name. Try again.' });
-  }
-
-  if (!company_address || !company_address.trim()) {
-    return res.status(400).send({ message: 'You must supply a company_address. Try again.' });
   }
 
   if (!business_type || !Company.validBusinessType(business_type)) {
@@ -51,13 +40,16 @@ exports.validateCompany = (req, res, next) => {
 
 exports.list = (req, res) => {
 
-  const { page, business_type } = req.params
-  const skip = ListPageSize * page;
-  const status = CompanyStatus.Active;
-  const query = { status };
+  const { page, status, business_type } = req.query;
+  const skip = page >= 0 ? ListPageSize * page : 0;
+  let query = { };
+
+  if (status >= 0) {
+    query = Object.assign(query, { status });
+  }
 
   if (business_type) {
-    query = Object.assign(query, {business_type});
+    query = Object.assign(query, { business_type });
   }
 
   Company
@@ -74,4 +66,18 @@ exports.list = (req, res) => {
       console.error(err);
       return res.status(500);
     })
+};
+
+exports.enforceCompanyAccess = async (req, res, next) => {
+
+    const { companyId } = req.params;
+    const { company } = req.user;
+
+    debugger
+
+    if (company && String(company._id) === companyId) {
+      return next();
+    }
+    res.status(401).end();
+
 };

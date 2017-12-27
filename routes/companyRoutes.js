@@ -1,5 +1,4 @@
 const passport = require('passport');
-const userController = require('../controllers/userController');
 const companyController = require('../controllers/companyController');
 
 module.exports = (app) => {
@@ -8,4 +7,5 @@ module.exports = (app) => {
     passport.authenticate('bearer', {session: false}),
     companyController.list
   );
+
 };

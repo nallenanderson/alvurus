@@ -24,6 +24,16 @@
         "pageSize": 10
       }
     },
+    "locations": {
+      "list": {
+        "pageSize": 10
+      }
+    },
+    "promos": {
+      "list": {
+        "pageSize": 10
+      }
+    },
     "users": {
       "password": {
         "hash": "sha256",

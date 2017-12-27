@@ -3,7 +3,7 @@ const validator = require('validator');
 const config = require('config');
 const crypto = require('crypto');
 const uuidv4 = require('uuid/v4');
-const { Schema }  = mongoose;
+const { Schema, Types }  = mongoose;
 
 const UserStatus = {
   Active: 0

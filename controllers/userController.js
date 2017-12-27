@@ -5,13 +5,30 @@ const passport = require('passport');
 const escapeStringRegexp = require('escape-string-regexp');
 const url = require('url');
 const https = require('https');
+const { indexOf } = require('lodash');
 
 const { UserStatus, UserScope } = require('../models/User.js');
 const { CompanyStatus, BusinessType } = require('../models/Company.js');
 
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-module.exports.validateUser = (req, res, next) => {
+module.exports.enforceScope = function() {
+
+  const scopes = arguments;
+
+  return (req, res, next) => {
+
+    const { user } = req;
+
+    if (user && indexOf(scopes, user.scope) != -1) {
+      return next();
+    }
+    res.status(401).end();
+  };
+
+};
+
+module.exports.validate = (req, res, next) => {
 
   const { email, password, first_name, last_name } = req.body;
   const validEmail = emailRegex.test(email);
@@ -47,42 +64,6 @@ module.exports.validateUser = (req, res, next) => {
 
   });
 };
-
-// Is this necessary? I think this is being called in  companyController.js.
-exports.validateCompany = (req, res, next) => {
-
-  const { company_name } = req.body;
-
-  if (!company_name || !company_name.trim()) {
-    return res.status(400).send({ message: 'You must supply a company_name. Try again.' });
-  }
-
-  if (!company_address || !company_address.trim()) {
-    return res.status(400).send({ message: 'You must supply a company_address. Try again.' });
-  }
-
-  if (!business_type || !Company.validBusinessType(business_type)) {
-    return res.status(400).send({ message: 'You must supply a business_type. Try again.' });
-  }
-
-  // search for other businesses with same name (case insensitive)
-  const companyRegExp = new RegExp(escapeStringRegexp(company_name), 'i');
-
-  Company.findOne({ name: companyRegExp }, (err, comp) => {
-
-    if (err) {
-      console.error(err);
-      return res.status(500);
-    }
-
-    if (comp) {
-      console.warn(`Company already registered: ${company_name}`);
-      return res.status(400).send({ message: 'Company already registered.' });
-    }
-    next()
-
-  });
-}
 
 exports.signupRegularPassword = (req, res) => {
 
