@@ -30,7 +30,6 @@ export const getOwnerLogin = (url, method, body) => async dispatch => {
 
   await localStorage.setItem('auth_token', auth_token);
   dispatch({ type: OWNER_LOGIN_SUCCESS, payload: auth_token });
-
   return { auth_token: 'success' };
 
 }

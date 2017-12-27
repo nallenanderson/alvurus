@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import FacebookAuth from 'react-facebook-auth';
 import { connect } from 'react-redux';
 
@@ -31,17 +31,11 @@ const FIELDS = [
     label: 'Password',
     fieldName: 'password',
     fieldType: 'password'
-  },
-  {
-    id: 'cdbe32f',
-    label: 'Confirm password',
-    fieldName: 'confirm_password',
-    fieldType: 'password'
   }
 ]
 
 class SignupForm extends Component {
-  state = {};
+  state = { submitting: false };
 
   componentDidMount() {
     this.props.ownerLogin();
@@ -68,10 +62,6 @@ class SignupForm extends Component {
       password: this.state.password
     };
 
-    if (this.state.password !== this.state.confirm_password) {
-      return this.setState({ error: 'Passwords do not match.' });
-    }
-
     const user = await this.props.getOwnerLogin(
       '/api/user/regular/signup/password',
       'POST',
@@ -79,7 +69,9 @@ class SignupForm extends Component {
     );
 
     if (user.message) {
-      return this.setState({ error: user.message });
+      return this.setState({ error: user.message, submitting: false });
+    } else {
+      this.setState({ submitting: false });
     }
   }
 
@@ -89,9 +81,18 @@ class SignupForm extends Component {
     return(
       <form className="reservation__form" onSubmit={this.handleSubmit}>
         <h1 className="centered">Sign up</h1>
+
         { this.renderInput() }
+
         <button type="submit" className="submit__button">Sign up</button>
-        <div className="separator"></div>
+
+        <div className="progress">
+          {
+            this.state.submitting ?
+            <div className="indeterminate"/> : <div className="determinate grey"/>
+          }
+        </div>
+
         <FacebookAuth
           appId="410759349341376"
           callback={(res) => this.props.loginFB(res)}

@@ -12,29 +12,25 @@ class FixedHeader extends Component {
 
   render() {
     return(
-      <div className="fixed__header">
-        <div className="container">
-          <Link to="/" className="brand__link">Fidelify</Link>
+      <div className="navbar-fixed">
+        <nav className="black__back">
+          <div className="nav-wrapper container">
+            <Link className="brand-logo left" to="/">Fidelify</Link>
             {
               this.props.auth_token ?
-              <ul>
-                <li>
-                  <Link to="/account">Account</Link>
-                </li>
-                <li>
-                  <a onClick={this.logoutUser}>Logout</a>
-                </li>
+              <ul id="nav-mobile" className="right hide-on-small-and-down">
+                <li><Link to="/dashboard">Dashboard</Link></li>
+                <li><Link to="/promos">Promotions</Link></li>
+                <li><Link to="/account">Account</Link></li>
+                <li><a onClick={this.logoutUser}>Logout</a></li>
               </ul> :
-              <ul>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <Link to="/signup">Sign up</Link>
-                </li>
+              <ul id="nav-mobile" className="right hide-on-med-and-down">
+                <li><Link to="/login">Login</Link></li>
+                <li><Link to="/signup">Signup</Link></li>
               </ul>
             }
-        </div>
+          </div>
+        </nav>
       </div>
     )
   }
@@ -43,4 +39,5 @@ class FixedHeader extends Component {
 function mapStateToProps ({ auth }) {
   return { auth_token: auth.auth_token };
 }
+
 export default connect(mapStateToProps, actions)(FixedHeader);

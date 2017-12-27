@@ -44,7 +44,7 @@ class LoginForm extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ loginText: 'Logging in...', error: null });
+    this.setState({ loginText: 'Logging in...', error: null, submitting: true });
 
     const body = {
       email: this.state.email,
@@ -52,7 +52,7 @@ class LoginForm extends Component {
     }
 
     const loginMessage = await this.props.getOwnerLogin('/api/user/login/password', 'POST', body);
-
+    this.setState({ submitting: false });
     if (loginMessage.message) return this.setState({ error: loginMessage.message, loginText: 'Login' });
   }
 
@@ -60,23 +60,34 @@ class LoginForm extends Component {
     if (this.props.auth_token) return <Redirect to="/account" />
 
     return(
-      <div>
-        <form className="reservation__form" onSubmit={this.handleSubmit}>
-          <h1 className="centered">Login</h1>
-          { this.renderInput() }
-          <button type="submit" className="submit__button">{this.state.loginText}</button>
-          <div className="separator"></div>
+      <div className="main__section row">
+        <div className="col s6 offset-s3">
+          <form className="reservation__form" onSubmit={this.handleSubmit}>
+            <h1 className="centered">Login</h1>
+
+            { this.renderInput() }
+            <button type="submit" className="submit__button">{this.state.loginText}</button>
+
+            <div className="progress">
+              {
+                this.state.submitting ?
+                <div className="indeterminate"/> : <div className="determinate grey"/>
+              }
+            </div>
+
             <FacebookAuth
               appId="410759349341376"
               callback={(res) => this.props.loginFB(res)}
               component={FBLoginButton}
             />
-          {
-            this.state.error ?
-            <p className="error__message">{this.state.error}</p> : null
-          }
-        </form>
 
+            {
+              this.state.error ?
+              <p className="error__message">{this.state.error}</p> : null
+            }
+          </form>
+          <p className="centered">Not a member? <Link to="/signup">Signup</Link> here.</p>
+        </div>
       </div>
     )
   }

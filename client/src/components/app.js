@@ -28,7 +28,7 @@ class App extends Component {
   }
 
   render() {
-    if (!this.props.auth_token) return <Redirect to="/" />
+    // if (!this.props.auth_token) return <Redirect to="/" />
 
     return (
       <div className="infinity__section">
