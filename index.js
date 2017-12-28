@@ -9,6 +9,7 @@ require('./models/Company');
 require('./models/Location');
 require('./models/Promo');
 require('./models/User');
+require('./models/Purchase');
 require('./utils/passport');
 
 mongoose.Promise = global.Promise;
@@ -25,6 +26,7 @@ require('./routes/userRoutes')(app);
 require('./routes/companyRoutes')(app);
 require('./routes/locationRoutes')(app);
 require('./routes/promoRoutes')(app);
+require('./routes/purchaseRoutes')(app);
 
 // PROD VS. DEV
 if (process.env.NODE_ENV === 'production') {

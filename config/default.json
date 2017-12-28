@@ -34,6 +34,11 @@
         "pageSize": 10
       }
     },
+    "purchase": {
+      "list": {
+        "pageSize": 10
+      }
+    },
     "users": {
       "password": {
         "hash": "sha256",
