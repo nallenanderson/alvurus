@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import SignUpForm from './signupForm';
 
 export default class Signup extends Component {
-  // async componentDidMount() {
-  //   const user = await fetch('/api/user/me', {
-  //     headers: {
-  //       'Authorization': 'Bearer 7bcee5cc-253e-47d4-af00-1a6443eae2cd'
-  //     }
-  //   }).then(data => data.json());
-  //   console.log(user);
-  // }
   render() {
     return(
-      <div className="infinity__section">
-        <SignUpForm />
+      <div className="main__section row">
+        <div className="col s6 offset-s3">
+          <SignUpForm />
+          <p className="centered">Already a member? <Link to="/login">Login</Link> here.</p>
+        </div>
       </div>
     )
   }

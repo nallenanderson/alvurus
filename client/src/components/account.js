@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 import InputField from './inputField';
+import Locations from './locations';
+import CheckList from './checkList';
 
 const FIELDS = [
   {
@@ -15,20 +17,14 @@ const FIELDS = [
   },
   {
     id: 'asb12c3',
-    label: 'Company Address',
-    fieldName: 'company_address',
-    fieldType: 'text',
-  },
-  {
-    id: 'asbc123',
-    label: 'Business type',
-    fieldName: 'business_type',
+    label: 'Company description',
+    fieldName: 'company_description',
     fieldType: 'text',
   }
 ]
 
 class Account extends Component {
-  state = { createText: 'Create Company' }
+  state = { createText: 'Save', businessTypes: {} }
 
   updateField = (value, name) => {
     if (!value) return;
@@ -45,7 +41,7 @@ class Account extends Component {
 
     const body = {
       company_name: this.state.company_name,
-      company_address: this.state.company_address,
+      company_description: this.state.company_address,
       business_type: this.state.business_type,
       auth_token: this.props.auth_token
     };
@@ -55,16 +51,38 @@ class Account extends Component {
     console.log(response);
   }
 
+  assignType = (type) => {
+    const { businessTypes } = this.state;
+
+    if (businessTypes[type]) {
+      businessTypes[type] = false;
+    } else {
+      businessTypes[type] = true;
+    }
+
+    this.setState({ businessTypes });
+  }
+
   render() {
     if (!this.props.auth_token) return <Redirect to="/" />
 
     return(
-      <div className="infinity__section">
-        <form className="reservation__form" onSubmit={this.handleSubmit}>
-          <h1>Company Info</h1>
-          { this.renderInput() }
-          <button type="submit" className="submit__button">{this.state.createText}</button>
-        </form>
+      <div className="main__section row">
+
+        <div className="col s6">
+          <form className="reservation__form" onSubmit={this.handleSubmit}>
+            
+            <h1>Company Info</h1>
+
+            { this.renderInput() }
+
+            <CheckList />
+
+            <button type="submit" className="submit__button">{this.state.createText}</button>
+
+          </form>
+        </div>
+        <Locations />
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'react-dates/lib/css/_datepicker.css';
+// import 'materialize-css/dist/css/materialize.min.css';
 import './assets/css/style.css';
 import { Provider } from 'react-redux';
 

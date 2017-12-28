@@ -7,6 +7,7 @@ import App from './components/app';
 import Account from './components/account';
 import Login from './components/login';
 import Signup from './components/signup';
+import Promos from './components/promos';
 import NotFound from './components/notFound';
 
 class Router extends Component {
@@ -20,7 +21,8 @@ class Router extends Component {
               <Route exact path="/" component={Login} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
-              <Route exact path="/app" component={App} />
+              <Route exact path="/dashboard" component={App} />
+              <Route exact path="/promos" component={Promos} />
               <Route exact path="/account" component={Account} />
               <Route component={NotFound} />
             </Switch>
